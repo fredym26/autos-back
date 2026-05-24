@@ -23,7 +23,7 @@ public class AutosController {
     IAutosService autosService;
 
     @PostMapping("/guardarUsuario")
-    public boolean guardarUsuario(@RequestBody UsuarioCreateDTO usuario){
+    public RespuestaDTO guardarUsuario(@RequestBody UsuarioCreateDTO usuario){
         log.info("REGISTRANDO usuario: " );
         return usuariosService.crearUsuario(usuario);
     }

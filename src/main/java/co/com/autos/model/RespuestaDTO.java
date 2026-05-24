@@ -1,0 +1,13 @@
+package co.com.autos.model;
+
+import lombok.Data;
+
+@Data
+public class AutenticacionDTO {
+
+    private boolean resultado;
+    private Integer codigo ;
+    private String token;
+    private Integer idUsuario;
+    private String notificacion;
+}

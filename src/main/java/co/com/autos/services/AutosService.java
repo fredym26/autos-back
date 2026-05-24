@@ -4,11 +4,14 @@ import co.com.autos.entities.Auto;
 import co.com.autos.entities.Usuario;
 import co.com.autos.mappers.AutoMapper;
 import co.com.autos.model.AutoDTO;
+import co.com.autos.model.RespuestaDTO;
 import co.com.autos.respositories.AutosRepository;
 import co.com.autos.respositories.UsuariosRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Log4j2
 @Service
@@ -24,7 +27,9 @@ public class AutosService implements IAutosService{
     UsuariosRepository usuariosRepository;
 
     @Override
-    public boolean registrarAuto(AutoDTO autoDTO) {
+    public RespuestaDTO registrarAuto(AutoDTO autoDTO) {
+
+        RespuestaDTO respuestaDTO = new RespuestaDTO();
 
         try {
 
@@ -32,11 +37,36 @@ public class AutosService implements IAutosService{
             Auto auto = autoMapper.toEntity(autoDTO);
             auto.setUsuario(usuario);
 
+            // Validar placa
+            if(!this.validarPlaca(auto.getNumeroPlaca())){
+                respuestaDTO.setResultado(false);
+                respuestaDTO.setCodigo(201);
+                respuestaDTO.setNotificacion("El formato de la placa no es valido, debe ser: ABC 123");
+                return respuestaDTO;
+            }
+
+            // Validar año auto
+            if(!this.validarAnio(auto.getAnio())){
+                respuestaDTO.setResultado(false);
+                respuestaDTO.setCodigo(201);
+                respuestaDTO.setNotificacion("El año del auto no puede ser mayor al año en curso");
+                return respuestaDTO;
+            }
+
             autosRepository.save(auto);
-            return true;
+
+            respuestaDTO.setResultado(true);
+            respuestaDTO.setCodigo(200);
+            respuestaDTO.setNotificacion("Auto registrado");
+            return respuestaDTO;
+
         }catch (Exception e){
             log.error("Error registrando o editando auto: " + e);
-            return false;
+            respuestaDTO.setResultado(false);
+            respuestaDTO.setCodigo(201);
+            respuestaDTO.setNotificacion("Error registrando el auto");
+            return respuestaDTO;
+
         }
     }
 
@@ -55,6 +85,25 @@ public class AutosService implements IAutosService{
             return false;
         }
 
+    }
+
+    @Override
+    public boolean validarPlaca(String placa) {
+        String regex = "^[A-Z]{3}\\s[0-9]{3}$";
+        return placa != null && placa.matches(regex);
+    }
+
+    @Override
+    public boolean validarAnio(Integer anio) {
+
+        LocalDate fechaActual = LocalDate.now();
+        int anioActual = fechaActual.getYear();
+
+        if(anio > anioActual){
+            return false;
+        }else {
+            return true;
+        }
     }
 
 

@@ -8,7 +8,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class UtilJwt {
+public class JwtUtil {
     private final String SECRET = "claveSecretaMuySeguraParaFirmarJWT123456";
     private final long EXPIRATION = 1000 * 60 * 60; // 1 hora
 

@@ -3,7 +3,7 @@ package co.com.autos.model;
 import lombok.Data;
 
 @Data
-public class AutenticacionDTO {
+public class RespuestaDTO {
 
     private boolean resultado;
     private Integer codigo ;

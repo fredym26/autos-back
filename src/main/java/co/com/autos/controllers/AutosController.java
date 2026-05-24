@@ -1,6 +1,7 @@
 package co.com.autos.controllers;
 
 import co.com.autos.model.AutoDTO;
+import co.com.autos.model.RespuestaDTO;
 import co.com.autos.model.UsuarioCreateDTO;
 import co.com.autos.model.UsuarioDTO;
 import co.com.autos.services.IAutosService;
@@ -28,7 +29,7 @@ public class AutosController {
     }
 
     @PostMapping("/registrarAuto")
-    public boolean registrarAuto(@RequestBody AutoDTO autoDTO){
+    public RespuestaDTO registrarAuto(@RequestBody AutoDTO autoDTO){
         log.info("REGISTRANDO auto: " );
         return autosService.registrarAuto(autoDTO);
     }

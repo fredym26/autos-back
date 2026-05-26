@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Log4j2
 @RequestMapping("/api/autos")
-@CrossOrigin(value = "http://localhost:4200")
+@CrossOrigin(value = "http://localhost:5173")
 public class AutosController {
 
     @Autowired

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
+@CrossOrigin(value = "http://localhost:5173")
 @RequestMapping("/autenticar")
 public class AutenticacionController {
 

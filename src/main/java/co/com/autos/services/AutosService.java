@@ -32,7 +32,9 @@ public class AutosService implements IAutosService{
         RespuestaDTO respuestaDTO = new RespuestaDTO();
 
         try {
-
+            if(autoDTO.getAutoId().equals(0)){
+                autoDTO.setAutoId(null);
+            }
             Usuario usuario = usuariosRepository.findById(autoDTO.getUsuarioId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
             Auto auto = autoMapper.toEntity(autoDTO);
             auto.setUsuario(usuario);

@@ -23,7 +23,7 @@ public class ConfiguracionSeguridad {
         http.csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/autenticar/**").permitAll()
+                .requestMatchers("/authentication/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtFiltro, UsernamePasswordAuthenticationFilter.class);

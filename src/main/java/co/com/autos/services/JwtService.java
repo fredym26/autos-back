@@ -1,9 +1,9 @@
 package co.com.autos.services;
 
-import co.com.autos.entities.Usuario;
+import co.com.autos.entities.User;
 import co.com.autos.jwt.JwtUtil;
-import co.com.autos.model.RespuestaDTO;
-import co.com.autos.respositories.UsuariosRepository;
+import co.com.autos.model.ResponseDTO;
+import co.com.autos.respositories.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,62 +13,62 @@ import org.springframework.stereotype.Service;
 public class JwtService implements  IJwtService{
 
     @Autowired
-    UsuariosRepository usuariosRepository;
+    UserRepository userRepository;
 
     @Autowired
     JwtUtil jwtUtil;
 
     @Override
-    public RespuestaDTO autenticar(String userName, String password) {
+    public ResponseDTO autenticar(String userName, String password) {
 
-        RespuestaDTO respuestaDTO = new RespuestaDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
 
         try{
             // Busca el usuario en base de datos
-            Usuario usuario = usuariosRepository.findByNombreUsuario(userName)
+            User user = userRepository.findByUserName(userName)
                     .orElseGet(() -> {
-                        Usuario u = new Usuario();
-                        u.setUsuarioId(0);
+                        User u = new User();
+                        u.setUserId(0);
                         return u;
                     });
 
             // Valida si el usuario existe
-            if(usuario.getUsuarioId().equals(0)){
-                respuestaDTO.setResultado(false);
-                respuestaDTO.setCodigo(403);
-                respuestaDTO.setIdUsuario(0);
-                respuestaDTO.setNotificacion("Usuario no existe");
-                return respuestaDTO;
+            if(user.getUserId().equals(0)){
+                responseDTO.setResultado(false);
+                responseDTO.setCodigo(403);
+                responseDTO.setIdUsuario(0);
+                responseDTO.setNotificacion("Usuario no existe");
+                return responseDTO;
             }
 
-            if(usuario.getNombreUsuario().equals(userName) && usuario.getContraseña().equals(password)) {
+            if(user.getUserName().equals(userName) && user.getPassword().equals(password)) {
 
                 // Genera token
                 String token = jwtUtil.generarToken(userName);
-                respuestaDTO.setResultado(true);
-                respuestaDTO.setCodigo(200);
-                respuestaDTO.setIdUsuario(usuario.getUsuarioId());
-                respuestaDTO.setToken(token);
-                respuestaDTO.setNotificacion("Correcto");
-                return respuestaDTO;
+                responseDTO.setResultado(true);
+                responseDTO.setCodigo(200);
+                responseDTO.setIdUsuario(user.getUserId());
+                responseDTO.setToken(token);
+                responseDTO.setNotificacion("Correcto");
+                return responseDTO;
             }else{
 
-                respuestaDTO.setResultado(false);
-                respuestaDTO.setCodigo(403);
-                respuestaDTO.setIdUsuario(0);
-                respuestaDTO.setNotificacion("Credenciales inválidas");
-                return respuestaDTO;
+                responseDTO.setResultado(false);
+                responseDTO.setCodigo(403);
+                responseDTO.setIdUsuario(0);
+                responseDTO.setNotificacion("Credenciales inválidas");
+                return responseDTO;
             }
 
 
 
         }catch (Exception e){
             log.error("Error consultando usuario: " + userName);
-            respuestaDTO.setResultado(false);
-            respuestaDTO.setCodigo(403);
-            respuestaDTO.setIdUsuario(0);
-            respuestaDTO.setNotificacion("Error de autenticacion");
-            return respuestaDTO;
+            responseDTO.setResultado(false);
+            responseDTO.setCodigo(403);
+            responseDTO.setIdUsuario(0);
+            responseDTO.setNotificacion("Error de autenticacion");
+            return responseDTO;
         }
 
     }

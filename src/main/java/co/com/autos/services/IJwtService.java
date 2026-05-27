@@ -1,7 +1,7 @@
 package co.com.autos.services;
 
-import co.com.autos.model.RespuestaDTO;
+import co.com.autos.model.ResponseDTO;
 
 public interface IJwtService {
-    RespuestaDTO autenticar(String userName, String password);
+    ResponseDTO autenticar(String userName, String password);
 }
